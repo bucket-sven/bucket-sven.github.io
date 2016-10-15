@@ -84,19 +84,16 @@
 
 
 
-<meta name="description" content="Node.js es7标准中加入了async/await用于处理异步函数。 async标记的函数中方能调用await, await用于等待异步函数的返回值, 而await目标必须是一个promise对象, 因此实际上await就是对promise对象取它的resolve值。
-使用babel-node运行es7代码12npm install -g babel-clinpm install babel">
+<meta name="description" content="Node.js es7标准中加入了async/await用于处理异步函数。 async标记的函数中方能调用await, await用于等待异步函数的返回值, 而await目标必须是一个promise对象, 因此实际上await就是对promise对象取它的resolve值。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="es7中的async/await">
 <meta property="og:url" content="http://yoursite.com/2016/10/15/es7-async-and-await/index.html">
 <meta property="og:site_name" content="Sven的博客">
-<meta property="og:description" content="Node.js es7标准中加入了async/await用于处理异步函数。 async标记的函数中方能调用await, await用于等待异步函数的返回值, 而await目标必须是一个promise对象, 因此实际上await就是对promise对象取它的resolve值。
-使用babel-node运行es7代码12npm install -g babel-clinpm install babel">
-<meta property="og:updated_time" content="2016-10-15T03:49:42.000Z">
+<meta property="og:description" content="Node.js es7标准中加入了async/await用于处理异步函数。 async标记的函数中方能调用await, await用于等待异步函数的返回值, 而await目标必须是一个promise对象, 因此实际上await就是对promise对象取它的resolve值。">
+<meta property="og:updated_time" content="2016-10-15T07:07:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="es7中的async/await">
-<meta name="twitter:description" content="Node.js es7标准中加入了async/await用于处理异步函数。 async标记的函数中方能调用await, await用于等待异步函数的返回值, 而await目标必须是一个promise对象, 因此实际上await就是对promise对象取它的resolve值。
-使用babel-node运行es7代码12npm install -g babel-clinpm install babel">
+<meta name="twitter:description" content="Node.js es7标准中加入了async/await用于处理异步函数。 async标记的函数中方能调用await, await用于等待异步函数的返回值, 而await目标必须是一个promise对象, 因此实际上await就是对promise对象取它的resolve值。">
 
 
 
@@ -298,6 +295,7 @@
 
       
         <p>Node.js es7标准中加入了async/await用于处理异步函数。 <code>async</code>标记的函数中方能调用<code>await</code>, <code>await</code>用于等待异步函数的返回值, 而<code>await</code>目标必须是一个<code>promise</code>对象, 因此实际上<code>await</code>就是对<code>promise</code>对象取它的<code>resolve</code>值。</p>
+<a id="more"></a>
 <h3 id="使用babel-node运行es7代码"><a href="#使用babel-node运行es7代码" class="headerlink" title="使用babel-node运行es7代码"></a>使用babel-node运行es7代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install -g babel-cli</div><div class="line">npm install babel-preset-es2015 babel-preset-stage-2 --save-dev</div></pre></td></tr></table></figure>
 <p>然后添加<code>.babelrc</code>文件，添加以下内容:</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"presets"</span>: [</div><div class="line">    <span class="string">"es2015"</span>,</div><div class="line">    <span class="string">"stage-2"</span></div><div class="line">  ],  </div><div class="line">  <span class="attr">"plugins"</span>: []</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -342,8 +340,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/29/metaprogramming-object-model/" rel="next" title="Ruby元编程-对象模型">
-                <i class="fa fa-chevron-left"></i> Ruby元编程-对象模型
+              <a href="/2016/08/29/metaprogramming-methods/" rel="next" title="Ruby元编程-方法">
+                <i class="fa fa-chevron-left"></i> Ruby元编程-方法
               </a>
             
           </div>

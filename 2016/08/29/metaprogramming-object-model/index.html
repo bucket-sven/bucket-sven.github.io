@@ -84,22 +84,16 @@
 
 
 
-<meta name="description" content="作为一个Ruby开发者，让人又爱又恨的便是元编程了。
-【前言】元编程是什么简单地说，元编程就是对语言本身的进行操作的一种编程手段，最常见的就是代码生成代码。对于Ruby这门语言而言，不会元编程，等于不会这门语言，因为这是它的核心能力与魅力。本文是基于阅读《Ruby元编程》后记录的一些自己的理解和看法。
-元编程示例【示例1】12345678910111213141516171819202122mod">
+<meta name="description" content="作为一个Ruby开发者，让人又爱又恨的便是元编程了。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ruby元编程-对象模型">
 <meta property="og:url" content="http://yoursite.com/2016/08/29/metaprogramming-object-model/index.html">
 <meta property="og:site_name" content="Sven的博客">
-<meta property="og:description" content="作为一个Ruby开发者，让人又爱又恨的便是元编程了。
-【前言】元编程是什么简单地说，元编程就是对语言本身的进行操作的一种编程手段，最常见的就是代码生成代码。对于Ruby这门语言而言，不会元编程，等于不会这门语言，因为这是它的核心能力与魅力。本文是基于阅读《Ruby元编程》后记录的一些自己的理解和看法。
-元编程示例【示例1】12345678910111213141516171819202122mod">
-<meta property="og:updated_time" content="2016-10-15T02:33:50.000Z">
+<meta property="og:description" content="作为一个Ruby开发者，让人又爱又恨的便是元编程了。">
+<meta property="og:updated_time" content="2016-10-15T07:08:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ruby元编程-对象模型">
-<meta name="twitter:description" content="作为一个Ruby开发者，让人又爱又恨的便是元编程了。
-【前言】元编程是什么简单地说，元编程就是对语言本身的进行操作的一种编程手段，最常见的就是代码生成代码。对于Ruby这门语言而言，不会元编程，等于不会这门语言，因为这是它的核心能力与魅力。本文是基于阅读《Ruby元编程》后记录的一些自己的理解和看法。
-元编程示例【示例1】12345678910111213141516171819202122mod">
+<meta name="twitter:description" content="作为一个Ruby开发者，让人又爱又恨的便是元编程了。">
 
 
 
@@ -301,6 +295,7 @@
 
       
         <p>作为一个Ruby开发者，让人又爱又恨的便是元编程了。</p>
+<a id="more"></a>
 <h3 id="【前言】元编程是什么"><a href="#【前言】元编程是什么" class="headerlink" title="【前言】元编程是什么"></a>【前言】元编程是什么</h3><p>简单地说，元编程就是对语言本身的进行操作的一种编程手段，最常见的就是<code>代码生成代码</code>。对于Ruby这门语言而言，不会元编程，等于不会这门语言，因为这是它的核心能力与魅力。本文是基于阅读《Ruby元编程》后记录的一些自己的理解和看法。</p>
 <h3 id="元编程示例"><a href="#元编程示例" class="headerlink" title="元编程示例"></a>元编程示例</h3><h4 id="【示例1】"><a href="#【示例1】" class="headerlink" title="【示例1】"></a>【示例1】</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">Kernel</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">attr_access</span><span class="params">(*args)</span></span></div><div class="line">    args.each <span class="keyword">do</span> <span class="params">|arg|</span></div><div class="line">      define_method(arg) <span class="keyword">do</span></div><div class="line">        instance_variable_get(<span class="string">"@<span class="subst">#&#123;arg&#125;</span>"</span>)</div><div class="line">      <span class="keyword">end</span></div><div class="line">      define_method(<span class="string">"<span class="subst">#&#123;arg&#125;</span>="</span>) <span class="keyword">do</span> <span class="params">|val|</span></div><div class="line">        instance_variable_set(<span class="string">"@<span class="subst">#&#123;arg&#125;</span>"</span>, val)</div><div class="line">      <span class="keyword">end</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></div><div class="line">  attr_access <span class="symbol">:name</span>, <span class="symbol">:age</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">stu = Student.new</div><div class="line">stu.age = <span class="number">20</span></div><div class="line">stu.name = <span class="string">'Rapheal'</span></div><div class="line"></div><div class="line">p stu.inspect</div></pre></td></tr></table></figure>
 <p><code>【示例1】</code>一个典型元编程的例子，它实现了Ruby中自带的<code>attr_accessor</code>相同的功能，作用是动态的为传入的参数（上面代码中是<code>:name</code>和<code>:age</code>）添加<code>setter</code>和<code>getter</code>方法（stu.age=xxx为其<code>setter</code>方法, stu.age为其<code>getter</code>方法）。这样的方法避免了类似Java中的长篇<code>setter</code>和<code>getter</code>定义。</p>
@@ -368,8 +363,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/10/15/es7-async-and-await/" rel="prev" title="es7中的async/await">
-                es7中的async/await <i class="fa fa-chevron-right"></i>
+              <a href="/2016/08/29/metaprogramming-methods/" rel="prev" title="Ruby元编程-方法">
+                Ruby元编程-方法 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

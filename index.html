@@ -296,271 +296,12 @@
 
       
         
-          
-            <p>Node.js es7标准中加入了async/await用于处理异步函数。 <code>async</code>标记的函数中方能调用<code>await</code>, <code>await</code>用于等待异步函数的返回值, 而<code>await</code>目标必须是一个<code>promise</code>对象, 因此实际上<code>await</code>就是对<code>promise</code>对象取它的<code>resolve</code>值。</p>
-<h3 id="使用babel-node运行es7代码"><a href="#使用babel-node运行es7代码" class="headerlink" title="使用babel-node运行es7代码"></a>使用babel-node运行es7代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install -g babel-cli</div><div class="line">npm install babel-preset-es2015 babel-preset-stage-2 --save-dev</div></pre></td></tr></table></figure>
-<p>然后添加<code>.babelrc</code>文件，添加以下内容:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"presets"</span>: [</div><div class="line">    <span class="string">"es2015"</span>,</div><div class="line">    <span class="string">"stage-2"</span></div><div class="line">  ],  </div><div class="line">  <span class="attr">"plugins"</span>: []</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>此时就可以使用<code>babel-node app.js</code>运行es7代码了。</p>
-<h3 id="传统的Promise生成"><a href="#传统的Promise生成" class="headerlink" title="传统的Promise生成"></a>传统的Promise生成</h3><h4 id="【示例代码1】"><a href="#【示例代码1】" class="headerlink" title="【示例代码1】"></a>【示例代码1】</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">readWithPromise</span>(<span class="params">filePath</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">    fs.readFile(filePath, (err, data) &#123;</div><div class="line">      <span class="keyword">if</span> (err) &#123;</div><div class="line">        reject(err);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        resolve(data);</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这段代码就是一返回一个promise对象,它的作用是读取一个文件的内容，因此我们要调用时只需要如下操作:</p>
-<h4 id="【示例代码2】"><a href="#【示例代码2】" class="headerlink" title="【示例代码2】"></a>【示例代码2】</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">run</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> data;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    data = <span class="keyword">await</span> readWithPromise(<span class="string">"./package.json"</span>);</div><div class="line">    <span class="comment">//data = await readWithGenerator("./package.json");</span></div><div class="line">    <span class="built_in">console</span>.log(data.toString());</div><div class="line">  &#125; <span class="keyword">catch</span>(e) &#123;</div><div class="line">    <span class="built_in">console</span>.error(e);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">run();</div></pre></td></tr></table></figure>
-<h3 id="以Generator方式"><a href="#以Generator方式" class="headerlink" title="以Generator方式"></a>以Generator方式</h3><p>除此之外，还有一种生成<code>promise</code>对象的方法, 那便是<code>generator</code>, 使用这种方法需要引用<code>co</code>这个包, 代码如下:</p>
-<h4 id="【示例代码3】"><a href="#【示例代码3】" class="headerlink" title="【示例代码3】"></a>【示例代码3】</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> co <span class="keyword">from</span> <span class="string">'co'</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">readWithGenerator</span>(<span class="params">filePath</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> co(<span class="function"><span class="keyword">function</span>*(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">let</span> content = <span class="keyword">yield</span> (<span class="function">(<span class="params">fp</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">return</span> <span class="function">(<span class="params">callback</span>) =&gt;</span> &#123;</div><div class="line">        fs.readFile(fp, <span class="string">"utf8"</span>, callback);</div><div class="line">      &#125;</div><div class="line">    &#125;)(filePath);</div><div class="line">    <span class="keyword">return</span> content;</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><code>【示例代码1】</code>与<code>【示例代码3】</code>作用完全一样, 最后它们都返回一个<code>promise</code>对象，因此调用方式也一样(见<code>【示例代码2】</code>).</p>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p><code>await</code> 仅仅只是<code>es7</code>加入的默认对<code>promise</code>的一种处理机制而已，它的作用其实类似于<code>generator</code>里面的<code>yield</code>。<code>yield</code>后面加的是一个<code>generator</code>函数，而<code>await</code>后面接的是一个<code>promise</code>对象，但它们都会在此等待结果返回后才会执行之后的代码。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/29/metaprogramming-object-model/" itemprop="url">
-                  Ruby元编程-对象模型
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-29T00:00:00+08:00" content="2016-08-29">
-              2016-08-29
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/29/metaprogramming-object-model/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/29/metaprogramming-object-model/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>作为一个Ruby开发者，让人又爱又恨的便是元编程了。</p>
-<h3 id="【前言】元编程是什么"><a href="#【前言】元编程是什么" class="headerlink" title="【前言】元编程是什么"></a>【前言】元编程是什么</h3><p>简单地说，元编程就是对语言本身的进行操作的一种编程手段，最常见的就是<code>代码生成代码</code>。对于Ruby这门语言而言，不会元编程，等于不会这门语言，因为这是它的核心能力与魅力。本文是基于阅读《Ruby元编程》后记录的一些自己的理解和看法。</p>
-<h3 id="元编程示例"><a href="#元编程示例" class="headerlink" title="元编程示例"></a>元编程示例</h3><h4 id="【示例1】"><a href="#【示例1】" class="headerlink" title="【示例1】"></a>【示例1】</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">Kernel</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">attr_access</span><span class="params">(*args)</span></span></div><div class="line">    args.each <span class="keyword">do</span> <span class="params">|arg|</span></div><div class="line">      define_method(arg) <span class="keyword">do</span></div><div class="line">        instance_variable_get(<span class="string">"@<span class="subst">#&#123;arg&#125;</span>"</span>)</div><div class="line">      <span class="keyword">end</span></div><div class="line">      define_method(<span class="string">"<span class="subst">#&#123;arg&#125;</span>="</span>) <span class="keyword">do</span> <span class="params">|val|</span></div><div class="line">        instance_variable_set(<span class="string">"@<span class="subst">#&#123;arg&#125;</span>"</span>, val)</div><div class="line">      <span class="keyword">end</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></div><div class="line">  attr_access <span class="symbol">:name</span>, <span class="symbol">:age</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">stu = Student.new</div><div class="line">stu.age = <span class="number">20</span></div><div class="line">stu.name = <span class="string">'Rapheal'</span></div><div class="line"></div><div class="line">p stu.inspect</div></pre></td></tr></table></figure>
-<p><code>【示例1】</code>一个典型元编程的例子，它实现了Ruby中自带的<code>attr_accessor</code>相同的功能，作用是动态的为传入的参数（上面代码中是<code>:name</code>和<code>:age</code>）添加<code>setter</code>和<code>getter</code>方法（stu.age=xxx为其<code>setter</code>方法, stu.age为其<code>getter</code>方法）。这样的方法避免了类似Java中的长篇<code>setter</code>和<code>getter</code>定义。</p>
-<p>##【主题】对象模型<br>Ruby作为一种完全面向对象的编程语言，即使是一个数字、类、甚至一个方法都是一个对象。所谓对象，就是能对它进行一系列操作的一个集合。</p>
-<h3 id="打开类"><a href="#打开类" class="headerlink" title="打开类"></a>打开类</h3><p>对象模型篇第一讲就是<code>打开类</code>。在<code>【示例1】</code>代码中其实就已经包含了<code>打开类</code>的一种具体实现方法。<code>打开类</code>，即打开一个已经存在的类或对象，为其<code>添加新方法</code>、<code>修改已存在的方法</code>或<code>删除不需要的方法</code>的一种技术。在<code>【示例1】</code>中，<code>Kernel</code>是Ruby库中已经存在的一个模块，使用<code>module Kernel</code>将其重新打开，并添加了一个新方法<code>attr_access</code>。于是<code>Kernel</code>模块便在原来的基础上新增了一个方法<code>attr_access</code>。</p>
-<h4 id="修改一个已经存在的方法【示例2】"><a href="#修改一个已经存在的方法【示例2】" class="headerlink" title="修改一个已经存在的方法【示例2】"></a>修改一个已经存在的方法<code>【示例2】</code></h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">str = <span class="string">"abc"</span></div><div class="line">p str.to_s <span class="comment"># 这里会输出"abc"</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">String</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">to_s</span></span></div><div class="line">    <span class="string">"Nothing"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line">str = <span class="string">"abc"</span></div><div class="line">p str.to_s <span class="comment"># 这里输出的就是"Nothing"了</span></div></pre></td></tr></table></figure>
-<p><code>String</code>也是Ruby库自带的类，<code>to_s</code>是<code>String</code>类已存在的方法，当重新打开它并重写了<code>to_s</code>方法之后，原来方法的作用便不复存在了，取而代之的是新方法的作用。（这种修改已经存在的方法又被称为<code>猴子补丁</code>）</p>
-<h4 id="打开类的利与弊"><a href="#打开类的利与弊" class="headerlink" title="打开类的利与弊"></a>打开类的利与弊</h4><p>通过<code>【示例1】</code>与<code>【示例2】</code>的代码可以知道，打开类技术可以很好的对已经存在的类或方法进行修改，使之更符合个人的使用需求。然而，若不加以思考随意使用，带来的问题也是很严重的。比如<code>String</code>类的<code>to_s</code>方法，作用就是要返回本身这个字符串，结果被别人修改了这个定义，导致了所有引用这个方法的代码全部失去了它本来的功能与意义。因此在使用打开类定义一个方法时，需要谨慎，<code>尽量取一个当前不存在的方法名来新定义一个方法</code>。</p>
-<h4 id="对象中有什么"><a href="#对象中有什么" class="headerlink" title="对象中有什么"></a>对象中有什么</h4><p>首先，<code>实例变量</code>，如<code>【示例1】</code>中的<code>:name</code>和<code>:age</code>，当调用<code>stu.name = &#39;rapheal&#39;</code>之后，<code>stu</code>对象便产生了一个实例变量<code>@name</code>。<code>实例变量必须是以【一个@符号】开头的变量名</code>。这时可以通过调用<code>stu.instance_variables</code>来查看已经存在的实例变量，可以看到输出中有<code>:@name</code>这一条。</p>
-<p>其次，<code>方法</code>。通过<code>stu.methods</code>可以查看<code>stu</code>对象能调用的所有方法。<code>Ruby对象共享方法，但不共享实例变量，共享的方法被称为【实例方法】。【实例方法】定义在对象的类中，这样可以使得同一类对象可以调用相同的方法。</code></p>
-<p><code>类也是对象。类对象所属的类是Class类。类的方法即为Class类中定义的【实例方法】。</code>比如，所有类都有一个方法<code>new</code>,而<code>new</code>方法的定义就在<code>Class</code>类中。我们甚至可以简单的认为：<code>ClassA = Class.new</code>和<code>class ClassA; end</code>是等价的。它们都是在定义一个新的类<code>ClassA</code>。</p>
-<h3 id="方法查找"><a href="#方法查找" class="headerlink" title="方法查找"></a>方法查找</h3><p>提到方法查找，那么首先要知道的就是<code>祖先链</code>。<code>祖先链</code>其实就是记录的一个类的<code>继承关系</code>的一个列表，可以通过调用<code>ancestors</code>方法来查看。比如<code>String.ancestors</code>返回的是<code>[String, Comparable, Object, Kernel, BasicObject]</code>，于是我们可以判断，<code>String</code>类继承自<code>Object</code>，（<code>Comparable</code>和<code>Kernel</code>是两个<code>module</code>,它被包含在了其中的某个类中，也会出现在祖先链中来，此处我们不讨论祖先链中的<code>module</code>），<code>Object</code>又继承自<code>BasicObject</code>。</p>
-<p>理解了方法链，再回头来看方法查找。Ruby中的方法查找有个原则叫作<code>向右，再向上。</code>比如，有一个<code>String</code>类的对象<code>str</code>，调用方法<code>str.test_call_method</code>，这时Ruby解释器会：</p>
-<ul>
-<li>1、<code>【向右】</code>来到<code>str</code>所属的<code>String</code>类查看<code>String</code>类是否定义了<code>test_call_method</code>这个方法，若定义了则直接调用</li>
-<li>2、<code>【向上】</code>否则查看<code>Comparable</code>这个<code>module</code>中是否定义这个方法（因为祖先链中有这个<code>module</code>，并且排在了第二个，即<code>String</code>类和<code>Object</code>类中间）</li>
-<li>3、<code>【向上】</code>若还未定义，则来到父类<code>Object</code>类查找</li>
-<li>4、重复上述2、3步骤直到<code>BasicObject</code>类</li>
-</ul>
-<p>上述步骤中，<code>步骤1</code>称为<code>向右</code>，<code>步骤2、3</code>称为<code>向上</code>。整个流程中，可以看出，方法查找是<code>优先向右（所属类）</code>查找，<code>再向上（优先是自身包含的模块然后是父类)</code>查找。因此称为<code>向右，再向上</code>原则。</p>
-<p>对于类所包含的模块会在方法查找时定义为一个<code>匿名类</code>并插入到祖先链中该类的<code>直接上方</code>。</p>
-<h3 id="关于self"><a href="#关于self" class="headerlink" title="关于self"></a>关于self</h3><p>在某个特定时刻，一定会有一个指定的对象在执行，这个对象就是<code>self</code>对象。最开始接触这个的时候，会有一个误区认为<code>self</code>是当前调用方法的<code>执行者</code>，然而事实上<code>self</code>是当前方法执行的<code>接收者</code>。简单说即是，<code>当前方法调用的结果会传递返回给这个self对象。</code></p>
-<p>谈到<code>self</code>，那么就应该顺便说一下<code>private</code>。Ruby中的private是和<code>self</code>相关的，在Ruby类的定义的<code>private</code>方法是不能被显式调用的。</p>
-<h4 id="private示例【示例3】"><a href="#private示例【示例3】" class="headerlink" title="private示例【示例3】"></a>private示例<code>【示例3】</code></h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">print_self</span></span></div><div class="line">    <span class="keyword">self</span>.t_pri</div><div class="line">  <span class="keyword">end</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">print_self_2</span></span></div><div class="line">    t_pri</div><div class="line">  <span class="keyword">end</span></div><div class="line">  private</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">t_pri</span></span></div><div class="line">    p <span class="string">"hello world"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">obj1 = A.new</div><div class="line">obj1.print_self_2 <span class="comment"># 输出 "hello world"</span></div><div class="line">obj1.print_self     <span class="comment"># 报错, NoMethodError: private method 't_pri' called</span></div><div class="line">obj1.t_pri            <span class="comment"># 报错，同上</span></div></pre></td></tr></table></figure>
-<p>从<code>【示例3】</code>，可以看出私有方法<code>t_pri</code>只能由<code>self</code>隐式调用，即<code>私有方法只能在定义的内部以直接调用方式调用，而不能在任何地方以 xxx.yyyy的方式调用。同时，若没有显式指定方法接收者，那么调用方法的接收都将隐式指定为self对象。</code></p>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>第一章对象模型基本上就这些内容，了解对象基本模型对于以后编写Gem包等扩展有相当重要的作用，尤其是self对象。以后的章节讲到扁平作用域的时候会对self对象有更加深刻的描述，如果这些技能不熟练，要编写Gem扩展真的是举步维艰。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/29/ruby-load-file/" itemprop="url">
-                  浅淡Ruby的文件加载与继承
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-29T00:00:00+08:00" content="2016-08-29">
-              2016-08-29
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/29/ruby-load-file/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/29/ruby-load-file/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="文件加载"><a href="#文件加载" class="headerlink" title="文件加载"></a>文件加载</h2><p>Ruby中load一个文件有四种方式，<code>require</code>、<code>require_relative</code>、<code>load</code>、<code>autoload</code>。</p>
-<h3 id="require和require-relative"><a href="#require和require-relative" class="headerlink" title="require和require_relative"></a>require和require_relative</h3><p><code>require</code>是Ruby中最常见的加载一个文件的方式，如调用<code>require &#39;rails&#39;</code>时，会<code>$LOAD_PATH</code>下寻找名为<code>rails</code>的<code>gem</code>包，然后将其<code>lib</code>文件夹下的同名文件加载到Ruby虚拟机中来。<code>多次require同一个包，只会加载一次。</code></p>
-<p><code>require_relative</code>与<code>require</code>类似，它只会在第一次调用时加载。区别是<code>require_relative</code>的调用是相对路径。如当前文件夹下存在一个名为<code>foo.rb</code>的文件时，调用的方式为<code>require_relative &#39;foo&#39;</code>。<code>它不能调用$LOAD_PATH中的包</code>。</p>
-<p>大约是Ruby2.0以后，<code>require</code>也支持了相对路径的加载。比如上面的<code>foo.rb</code>在当前目录时，通过<code>require &#39;./foo&#39;</code>也能达到<code>require_relative &#39;foo&#39;</code>的效果。</p>
-<h3 id="load"><a href="#load" class="headerlink" title="load"></a>load</h3><p><code>load</code>也是加载一个文件，它与<code>require_relative</code>的区别是：</p>
-<ul>
-<li><code>require_relative</code>多次加载同一文件时，只会加载一次；<code>load</code>每一次调用都会重加载该文件。</li>
-</ul>
-<h3 id="autoload"><a href="#autoload" class="headerlink" title="autoload"></a>autoload</h3><p><code>autoload</code>是一种重要的加载方式，与<code>require</code>的区别是<code>require是即时加载</code>，<code>autoload</code>的加载是<code>懒加载</code>，即在需要它的时候才会被加载。<code>autoload在某一个作用域内多次加载也只会被加载一次，因此不要以为它与load方法相似。</code></p>
-<p>如果当前路径下有<code>a.rb</code>、<code>b.rb</code>两个文件：<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></div><div class="line">  autoload <span class="symbol">:B</span>, <span class="string">'./b'</span></div><div class="line">  <span class="comment"># 与 require './b' 等价，但autoload只有在调用 A::B 的时候才会去加载</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure></p>
-<p><code>autoload</code>第一个参数是类名的符号，第二个参数是加载的路径。它同时支持加载<code>$LOAD_PATH</code>里的文件和<code>相对路径</code>、<code>绝对路径</code>的文件。</p>
-<p><code>Rails</code>中重定义了<code>autoload</code>方法，补充了一下path为空的情况下的常量寻找方法：</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></div><div class="line">  <span class="keyword">require</span> <span class="string">"active_support/all"</span></div><div class="line">  extend ActiveSupport::Autoload</div><div class="line">  autoload <span class="symbol">:B</span>, <span class="string">"b"</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar</span></span></div><div class="line">  <span class="keyword">require</span> <span class="string">"active_support/all"</span></div><div class="line">  extend ActiveSupport::Autoload</div><div class="line">  autoload <span class="symbol">:B</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
-<p><code>Bar</code>中的<code>autoload</code>没有指定加载文件的路径，<code>Rails</code>会自动生成加载路径<code>bar/b</code>，而<code>Foo</code>中的路径已指明，加载的路径是<code>b</code>，因此两者加载的路径是不一样的。这是<code>Rails</code>中<code>autoload</code>与<code>Ruby</code>中<code>autoload</code>的区别。</p>
-<h2 id="变量与继承"><a href="#变量与继承" class="headerlink" title="变量与继承"></a>变量与继承</h2><p>关于对象模型，已经在元编程-对象模型篇讲过，此处不作详细说明。</p>
-<h3 id="类变量"><a href="#类变量" class="headerlink" title="类变量"></a>类变量</h3><p>类变量是以<code>@@</code>开头命名的变量，在Ruby中，类变量是单例，<code>在整个祖先链中是唯一的。</code></p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></div><div class="line">  @@a = <span class="number">1</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">self</span>.<span class="title">a</span></span></div><div class="line">    @@a</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">self</span>.<span class="title">a=</span><span class="params">(a)</span></span></div><div class="line">    @@a = a</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> &lt; A</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">B.a = <span class="number">2</span></div><div class="line">p A.a  <span class="comment"># 这里输出的值是2</span></div></pre></td></tr></table></figure>
-<p>代码中定义了一个类<code>B</code>继承自<code>A</code>,改变了<code>B.a</code>的值，<code>A.a</code>的值也跟着变化了。<code>说明类变量是祖先链中唯一的。</code>这个专门问题被提出来讲，主要是前段时间面试的时候这个问题的理解上出了问题。之前以为两个类的<code>self</code>不一样因此调用的不是同一个类变量对象。</p>
-<p>由于<code>类方法</code>和<code>实例方法</code>都是可以被继承的，因此调用<code>B.a</code>的时候，实质上<code>B</code>中并不存在<code>a</code>方法，因此调用的还是祖先链上游的<code>A.a</code>方法，这与外部调用<code>A.a</code>实际上效果一样。因此<code>类变量是可以被继承的类所共享的。</code></p>
-<h3 id="类的实例变量"><a href="#类的实例变量" class="headerlink" title="类的实例变量"></a>类的实例变量</h3><p>实例变量是以<code>@</code>开头的变量，大部分情况下使用实例变量都是为<code>类的实例</code>服务的。然而类本身，也是一个实例对象，因此<code>类也可以有实例变量</code>。</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></div><div class="line">  @a = <span class="number">1</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">self</span>.<span class="title">a</span></span></div><div class="line">    @a</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">self</span>.<span class="title">a=</span><span class="params">(a)</span></span></div><div class="line">    @a = a</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> &lt; A</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">p A.a <span class="comment"># 1</span></div><div class="line">p B.a <span class="comment"># nil</span></div><div class="line">B.a = <span class="number">2</span></div><div class="line">p A.a <span class="comment"># 1</span></div><div class="line">p B.a <span class="comment"># 2</span></div></pre></td></tr></table></figure>
-<p>可以看到<code>@a</code>对象是不共享的，<code>A</code>和<code>B</code>两个类都有自己独立的实例变量，因此修改任一个都不会影响另一个。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>require系与autoload在<code>同一个命名空间下</code>只会加载一次，load每调用一次便会重加载一次；require与load是实时加载，autoload是懒加载。类方法和类变量是可以被子类继承的，在本身的类中找不到时会在祖先链中去寻找，而<code>类的实例变量是不能被继承的</code>，因此实例变量是不会在祖先链中去查找的。</p>
-
-          
+          <p>Node.js es7标准中加入了async/await用于处理异步函数。 <code>async</code>标记的函数中方能调用<code>await</code>, <code>await</code>用于等待异步函数的返回值, 而<code>await</code>目标必须是一个<code>promise</code>对象, 因此实际上<code>await</code>就是对<code>promise</code>对象取它的<code>resolve</code>值。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/10/15/es7-async-and-await/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -658,29 +399,218 @@
 
       
         
-          
-            <p>Ruby是一门动态语言，动态创建与调用方法是其中一个体现。</p>
-<h3 id="动态方法"><a href="#动态方法" class="headerlink" title="动态方法"></a>动态方法</h3><h4 id="动态调用方法（动态派发）"><a href="#动态调用方法（动态派发）" class="headerlink" title="动态调用方法（动态派发）"></a>动态调用方法（动态派发）</h4><p>动态调用方法，是指在代码中不通过硬编码而是在程序运行时自动去决定要调用的方法的一种行为。</p>
-<h4 id="示例代码1"><a href="#示例代码1" class="headerlink" title="示例代码1"></a>示例代码1</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></div><div class="line">  <span class="keyword">attr_accessor</span> <span class="symbol">:name</span>, <span class="symbol">:age</span>, <span class="symbol">:birthday</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(args = &#123;&#125;)</span></span></div><div class="line">    name = args[<span class="symbol">:name</span>]</div><div class="line">    age    = args[<span class="symbol">:age</span>]</div><div class="line">    birthday = args[<span class="symbol">:birthday</span>]</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
-<p><code>【示例代码1】</code>中<code>initialize</code>方法中，给三个字段赋值的方式就是一种典型的硬编码方式，假如这三个字段的名称有改动，抑或添加、去掉字段的时候，不得不同时修改这个方法。为了避免这种情况，这里可以考虑使用动态调用的方式来重构它。</p>
-<h4 id="示例代码2"><a href="#示例代码2" class="headerlink" title="示例代码2"></a>示例代码2</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></div><div class="line">  <span class="keyword">attr_accessor</span> <span class="symbol">:name</span>, <span class="symbol">:age</span>, <span class="symbol">:birthday</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(args = &#123;&#125;)</span></span></div><div class="line">    args.each <span class="keyword">do</span> <span class="params">|key, value|</span></div><div class="line">      method_name = <span class="string">"<span class="subst">#&#123;key&#125;</span>="</span></div><div class="line">      <span class="keyword">self</span>.send(<span class="string">"<span class="subst">#&#123;key&#125;</span>="</span>, value) <span class="keyword">if</span> <span class="keyword">self</span>.respond_to?(method_name)</div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
-<p>通过<code>【示例代码2】</code>的重构，但凡<code>attr_accessor</code>后面的字段有变动时，<code>initialize</code>方法都会自动进行适配。那么实现的原理是什么呢？</p>
-<p>在Ruby中，方法调用其实是向一个对象发送了一条消息，当接收方接收消息后，会在对象的祖先链中去寻找这个方法，找到之后调用它并返回给<code>self</code>对象（<a href="http://www.jianshu.com/p/324fc76e68a2" target="_blank" rel="external">详细见【对象模型篇】</a>）。也就是说，当调用<code>str.method</code>的时候，本质上就是发送了一条方法调用的消息，接收者是<code>str</code>对象，它等价于<code>str.send(:method)</code>。因此示例代码便很好理解了，它是将<code>args</code>这个hash中的值进行遍历，动态调用<code>attr_accessor</code>生成的<code>setter</code>和<code>getter</code>方法。但有一个问题，如果参数中有在<code>attr_accessor</code>未定义的字段怎么办？比如<code>Student.new({ year: 2016 })</code>，<code>year</code>字段是未在<code>attr_accessor</code>中定义的，如果调用<code>self.year =</code>这个方法，是会拋异常的。所以这里添加了<code>respond_to?</code>来判断这个方法是否是存在的，存在再对它进行调用赋值。</p>
-<h4 id="动态定义方法"><a href="#动态定义方法" class="headerlink" title="动态定义方法"></a>动态定义方法</h4><p>关于动态定义方法，其实在第一章<a href="http://www.jianshu.com/p/324fc76e68a2" target="_blank" rel="external">对象模型篇</a>的<code>【示例代码1】</code>已经在使用了，就是对<code>define_method</code>的使用。在此基础之上，此处实现一个更加具有可用性的案例：</p>
-<h4 id="示例代码3"><a href="#示例代码3" class="headerlink" title="示例代码3"></a>示例代码3</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">Kernel</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">attr_access</span><span class="params">(*args)</span></span></div><div class="line">    args.each <span class="keyword">do</span> <span class="params">|arg|</span></div><div class="line">      define_method(arg) <span class="keyword">do</span></div><div class="line">        instance_variable_get(<span class="string">"@<span class="subst">#&#123;arg&#125;</span>"</span>)</div><div class="line">      <span class="keyword">end</span></div><div class="line">      define_method(<span class="string">"<span class="subst">#&#123;arg&#125;</span>="</span>) <span class="keyword">do</span> <span class="params">|value|</span></div><div class="line">        instance_variable_set(<span class="string">"@&#123;arg&#125;="</span>, value)</div><div class="line">      <span class="keyword">end</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">cattr_access</span><span class="params">(*args)</span></span></div><div class="line">    args.each <span class="keyword">do</span> <span class="params">|arg|</span></div><div class="line">      define_singleton_method(arg) <span class="keyword">do</span></div><div class="line">        <span class="keyword">self</span>.class_variable_get(<span class="string">"@@<span class="subst">#&#123;arg&#125;</span>"</span>)</div><div class="line">      <span class="keyword">end</span></div><div class="line">      define_singleton_method(<span class="string">"<span class="subst">#&#123;arg&#125;</span>="</span>) <span class="keyword">do</span> <span class="params">|value|</span></div><div class="line">        <span class="keyword">self</span>.class_variable_set(<span class="string">"@@<span class="subst">#&#123;arg&#125;</span>"</span>, value)</div><div class="line">      <span class="keyword">end</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></div><div class="line">  cattr_access <span class="symbol">:a</span></div><div class="line"><span class="keyword">end</span></div><div class="line">A.a = <span class="number">1</span></div><div class="line">p A.a  <span class="comment"># 输出1</span></div></pre></td></tr></table></figure>
-<p>此处不再说明<code>define_method</code>和<code>attr_access</code>的使用，重点说明一下<code>define_singleton_method</code>和<code>cattr_access</code>的实现。</p>
-<p><code>define_singleton_method</code>和<code>define_method</code>的区别是，前者定义的是<code>单例方法</code>（这里可称为类方法），后者定义的是<code>实例方法</code>。从用法来看，<code>cattr_access</code>声明的变量直接在类（这里是<code>A</code>）上调用，而<code>attr_access</code>声明的变量需要在<code>A</code>类对象实例化（<code>A.new</code>）之后调用。同理，<code>class_variable_set</code>和<code>class_variable_get</code>定义的是单例变量（这里指类变量），而<code>instance_variable_set</code>和<code>instance_variable_get</code>定义的是实例变量。由于Ruby的语法约定，以<code>@</code>开头的为实例变量，以<code>@@</code>开头的为类变量，因此，在定义变量时尤其要注意变量的全名，否则会拋异常。</p>
-<h4 id="幽灵方法"><a href="#幽灵方法" class="headerlink" title="幽灵方法"></a>幽灵方法</h4><p>还记得之前在方法查找中，如果找不到方法时，会触发一个<code>NoMethodError</code>的异常拋出。然而它来源于向对象发送了一个消息调用了一个方法叫做<code>method_missing</code>。</p>
-<p>假如对一个<code>String</code>类对象<code>str</code>调用<code>test_method_a</code>，即<code>str.test_method_a</code>，由于这个方法未定义，因此在祖先链中找不到这个方法。此时会发送一个消息<code>str.send(:method_missing, :test_method_a)</code>，从而拋出<code>NoMethodError</code>的异常。也就是说，当找不到要调用的方法时，会自动触发调用<code>method_missing</code>方法。那么如果重写了某个类的<code>method_missing</code>方法会是什么样的结果呢？</p>
-<h4 id="示例代码4"><a href="#示例代码4" class="headerlink" title="示例代码4"></a>示例代码4</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">XmlGen</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">method_missing</span><span class="params">(name, *args, &amp;block)</span></span></div><div class="line">    <span class="keyword">if</span> <span class="string">%W(html head title body)</span>.<span class="keyword">include</span>?(name.to_s)</div><div class="line">      define_singleton_method(name) <span class="keyword">do</span> <span class="params">|arg = <span class="literal">nil</span>, &amp;blk|</span></div><div class="line">        str  = <span class="string">"&lt;<span class="subst">#&#123;name&#125;</span>&gt;"</span></div><div class="line">        str += arg <span class="keyword">if</span> arg</div><div class="line">        str += blk.call <span class="keyword">if</span> blk</div><div class="line">        str += <span class="string">"&lt;/<span class="subst">#&#123;name&#125;</span>&gt;"</span></div><div class="line">        str</div><div class="line">      <span class="keyword">end</span></div><div class="line">      <span class="keyword">self</span>.send(name, *args, &amp;block)</div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">xml = XmlGen.new</div><div class="line">str = xml.html <span class="keyword">do</span></div><div class="line">  xml.head <span class="keyword">do</span></div><div class="line">    xml.title <span class="string">"Test"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line">p str  <span class="comment"># 输出&lt;html&gt;&lt;head&gt;&lt;title&gt;Test&lt;/title&gt;&lt;/head&gt;&lt;/html&gt;</span></div></pre></td></tr></table></figure>
-<p>由于在<code>method_missing</code>中对调用方法的名字做了限制，必须是<code>html</code>、<code>head</code>、<code>title</code>、<code>body</code>其中之一才会生成代码，因此无需担心其它额外正常调用不存在方法的时候不能正常拋出<code>NoMethodError</code>异常的情况。由于在调用不存在的方法时就会调用<code>method_missing</code>这个方法，因此如果要重写这个方法一定要格外小心，<code>能力越大，责任越大</code>。</p>
-<h4 id="幽灵方法与普通动态方法的优劣"><a href="#幽灵方法与普通动态方法的优劣" class="headerlink" title="幽灵方法与普通动态方法的优劣"></a>幽灵方法与普通动态方法的优劣</h4><p>普通动态方法是指，在类初始化时便使用<code>define_method</code>等手段将需要的所有方法定义好。幽灵方法本质是在调用时，如果发现不存在方法时，那么即时定义这个方法并产生一次调用，从示例可以看出幽灵方法在定义方法时也是调用的<code>define_method</code>等行为来定义动态方法。与普通定义动态方法的区别是，如果一个对象永远没有调用一个方法，那么这个方法永远不会被定义，只有调用过一次时它才会被定义，因此使用幽灵方法时，对象所占用的内存空间比普通动态方法要少，反之付出的代价是第一次在祖先链中查找该方法的时间变长。<code>这可以认为是一种以时间换取空间的策略。</code></p>
-<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p>动态代理的原理是，对<code>a</code>对象的操作转移到<code>b</code>对象上来，Ruby中使用<code>delegate</code>库来实现动态代理。</p>
-<h4 id="示例代码5"><a href="#示例代码5" class="headerlink" title="示例代码5"></a>示例代码5</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserProfile</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(name)</span></span></div><div class="line">    @name = name</div><div class="line">  <span class="keyword">end</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">hello</span></span></div><div class="line">    <span class="string">"<span class="subst">#&#123;@name&#125;</span> says hello."</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> &lt; DelegateClass(<span class="title">UserProfile</span>)</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(user_profile)</span></span></div><div class="line">    <span class="keyword">super</span>(user_profile)</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line">user_profile = UserProfile.new(<span class="string">"Rapheal"</span>)</div><div class="line">user = User.new(user_profile)</div><div class="line">p user.hello  <span class="comment"># 输出 "Rapheal says hello."</span></div></pre></td></tr></table></figure>
-<h4 id="关于respond-to"><a href="#关于respond-to" class="headerlink" title="关于respond_to?"></a>关于respond_to?</h4><p><code>respond_to?</code>是Ruby中用于判断一个方法是否存在的一个方法。比如，<code>Class.respond_to?(:new) #返回true</code>，说明<code>Class</code>这个类可以调用<code>new</code>方法。这个方法通常与<code>define_method</code>、<code>method_missing</code>等方法一起使用，与<code>method_missing</code>一样，不到万不得已，不要修改这个方法。</p>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>本章主要讲了使用define_method来定义动态方法，使用method_missing来处理<code>NoMethodError</code>的情况。依然是那句话，能力越大，责任越大。如果能加以善用，那么这些特征能使的代码的灵活度越来越高，反之只能使之晦涩难懂甚至导致难以追踪的BUG。慎之！慎之！</p>
+          <p>Ruby是一门动态语言，动态创建与调用方法是其中一个体现。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/08/29/metaprogramming-methods/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/29/metaprogramming-object-model/" itemprop="url">
+                  Ruby元编程-对象模型
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-29T00:00:00+08:00" content="2016-08-29">
+              2016-08-29
+            </time>
+          </span>
 
           
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/29/metaprogramming-object-model/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/29/metaprogramming-object-model/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>作为一个Ruby开发者，让人又爱又恨的便是元编程了。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/08/29/metaprogramming-object-model/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/29/ruby-load-file/" itemprop="url">
+                  浅淡Ruby的文件加载与继承
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-29T00:00:00+08:00" content="2016-08-29">
+              2016-08-29
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/29/ruby-load-file/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/29/ruby-load-file/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Ruby中load一个文件有四种方式，<code>require</code>、<code>require_relative</code>、<code>load</code>、<code>autoload</code>。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/08/29/ruby-load-file/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>

@@ -84,19 +84,16 @@
 
 
 
-<meta name="description" content="文件加载Ruby中load一个文件有四种方式，require、require_relative、load、autoload。
-require和require_relativerequire是Ruby中最常见的加载一个文件的方式，如调用require &amp;#39;rails&amp;#39;时，会$LOAD_PATH下寻找名为rails的gem包，然后将其lib文件夹下的同名文件加载到Ruby虚拟机中来。多次">
+<meta name="description" content="Ruby中load一个文件有四种方式，require、require_relative、load、autoload。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅淡Ruby的文件加载与继承">
 <meta property="og:url" content="http://yoursite.com/2016/08/29/ruby-load-file/index.html">
 <meta property="og:site_name" content="Sven的博客">
-<meta property="og:description" content="文件加载Ruby中load一个文件有四种方式，require、require_relative、load、autoload。
-require和require_relativerequire是Ruby中最常见的加载一个文件的方式，如调用require &amp;#39;rails&amp;#39;时，会$LOAD_PATH下寻找名为rails的gem包，然后将其lib文件夹下的同名文件加载到Ruby虚拟机中来。多次">
-<meta property="og:updated_time" content="2016-10-15T02:33:54.000Z">
+<meta property="og:description" content="Ruby中load一个文件有四种方式，require、require_relative、load、autoload。">
+<meta property="og:updated_time" content="2016-10-15T07:08:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅淡Ruby的文件加载与继承">
-<meta name="twitter:description" content="文件加载Ruby中load一个文件有四种方式，require、require_relative、load、autoload。
-require和require_relativerequire是Ruby中最常见的加载一个文件的方式，如调用require &amp;#39;rails&amp;#39;时，会$LOAD_PATH下寻找名为rails的gem包，然后将其lib文件夹下的同名文件加载到Ruby虚拟机中来。多次">
+<meta name="twitter:description" content="Ruby中load一个文件有四种方式，require、require_relative、load、autoload。">
 
 
 
@@ -297,7 +294,8 @@ require和require_relativerequire是Ruby中最常见的加载一个文件的方�
       
 
       
-        <h2 id="文件加载"><a href="#文件加载" class="headerlink" title="文件加载"></a>文件加载</h2><p>Ruby中load一个文件有四种方式，<code>require</code>、<code>require_relative</code>、<code>load</code>、<code>autoload</code>。</p>
+        <p>Ruby中load一个文件有四种方式，<code>require</code>、<code>require_relative</code>、<code>load</code>、<code>autoload</code>。</p>
+<a id="more"></a>
 <h3 id="require和require-relative"><a href="#require和require-relative" class="headerlink" title="require和require_relative"></a>require和require_relative</h3><p><code>require</code>是Ruby中最常见的加载一个文件的方式，如调用<code>require &#39;rails&#39;</code>时，会<code>$LOAD_PATH</code>下寻找名为<code>rails</code>的<code>gem</code>包，然后将其<code>lib</code>文件夹下的同名文件加载到Ruby虚拟机中来。<code>多次require同一个包，只会加载一次。</code></p>
 <p><code>require_relative</code>与<code>require</code>类似，它只会在第一次调用时加载。区别是<code>require_relative</code>的调用是相对路径。如当前文件夹下存在一个名为<code>foo.rb</code>的文件时，调用的方式为<code>require_relative &#39;foo&#39;</code>。<code>它不能调用$LOAD_PATH中的包</code>。</p>
 <p>大约是Ruby2.0以后，<code>require</code>也支持了相对路径的加载。比如上面的<code>foo.rb</code>在当前目录时，通过<code>require &#39;./foo&#39;</code>也能达到<code>require_relative &#39;foo&#39;</code>的效果。</p>
@@ -352,10 +350,6 @@ require和require_relativerequire是Ruby中最常见的加载一个文件的方�
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/08/29/metaprogramming-methods/" rel="next" title="Ruby元编程-方法">
-                <i class="fa fa-chevron-left"></i> Ruby元编程-方法
-              </a>
             
           </div>
 
@@ -493,7 +487,7 @@ require和require_relativerequire是Ruby中最常见的加载一个文件的方�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件加载"><span class="nav-number">1.</span> <span class="nav-text">文件加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#require和require-relative"><span class="nav-number">1.1.</span> <span class="nav-text">require和require_relative</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#load"><span class="nav-number">1.2.</span> <span class="nav-text">load</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#autoload"><span class="nav-number">1.3.</span> <span class="nav-text">autoload</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量与继承"><span class="nav-number">2.</span> <span class="nav-text">变量与继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类变量"><span class="nav-number">2.1.</span> <span class="nav-text">类变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类的实例变量"><span class="nav-number">2.2.</span> <span class="nav-text">类的实例变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#require和require-relative"><span class="nav-number">1.</span> <span class="nav-text">require和require_relative</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#load"><span class="nav-number">2.</span> <span class="nav-text">load</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#autoload"><span class="nav-number">3.</span> <span class="nav-text">autoload</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量与继承"><span class="nav-number"></span> <span class="nav-text">变量与继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类变量"><span class="nav-number">1.</span> <span class="nav-text">类变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类的实例变量"><span class="nav-number">2.</span> <span class="nav-text">类的实例变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number"></span> <span class="nav-text">总结</span></a></div>
             
           </div>
         </section>
