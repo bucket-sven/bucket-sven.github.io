@@ -1,0 +1,662 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ruby,元编程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="作为一个Ruby开发者，让人又爱又恨的便是元编程了。
+【前言】元编程是什么简单地说，元编程就是对语言本身的进行操作的一种编程手段，最常见的就是代码生成代码。对于Ruby这门语言而言，不会元编程，等于不会这门语言，因为这是它的核心能力与魅力。本文是基于阅读《Ruby元编程》后记录的一些自己的理解和看法。
+元编程示例【示例1】12345678910111213141516171819202122mod">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ruby元编程-对象模型">
+<meta property="og:url" content="http://yoursite.com/2016/08/29/metaprogramming-object-model/index.html">
+<meta property="og:site_name" content="Sven的博客">
+<meta property="og:description" content="作为一个Ruby开发者，让人又爱又恨的便是元编程了。
+【前言】元编程是什么简单地说，元编程就是对语言本身的进行操作的一种编程手段，最常见的就是代码生成代码。对于Ruby这门语言而言，不会元编程，等于不会这门语言，因为这是它的核心能力与魅力。本文是基于阅读《Ruby元编程》后记录的一些自己的理解和看法。
+元编程示例【示例1】12345678910111213141516171819202122mod">
+<meta property="og:updated_time" content="2016-10-15T02:33:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ruby元编程-对象模型">
+<meta name="twitter:description" content="作为一个Ruby开发者，让人又爱又恨的便是元编程了。
+【前言】元编程是什么简单地说，元编程就是对语言本身的进行操作的一种编程手段，最常见的就是代码生成代码。对于Ruby这门语言而言，不会元编程，等于不会这门语言，因为这是它的核心能力与魅力。本文是基于阅读《Ruby元编程》后记录的一些自己的理解和看法。
+元编程示例【示例1】12345678910111213141516171819202122mod">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/08/29/metaprogramming-object-model/"/>
+
+
+  <title> Ruby元编程-对象模型 | Sven的博客 </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?197313954ecbcaba6caa2e8a2773f751";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Sven的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Ruby元编程-对象模型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-29T00:00:00+08:00" content="2016-08-29">
+              2016-08-29
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/29/metaprogramming-object-model/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/29/metaprogramming-object-model/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>作为一个Ruby开发者，让人又爱又恨的便是元编程了。</p>
+<h3 id="【前言】元编程是什么"><a href="#【前言】元编程是什么" class="headerlink" title="【前言】元编程是什么"></a>【前言】元编程是什么</h3><p>简单地说，元编程就是对语言本身的进行操作的一种编程手段，最常见的就是<code>代码生成代码</code>。对于Ruby这门语言而言，不会元编程，等于不会这门语言，因为这是它的核心能力与魅力。本文是基于阅读《Ruby元编程》后记录的一些自己的理解和看法。</p>
+<h3 id="元编程示例"><a href="#元编程示例" class="headerlink" title="元编程示例"></a>元编程示例</h3><h4 id="【示例1】"><a href="#【示例1】" class="headerlink" title="【示例1】"></a>【示例1】</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">Kernel</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">attr_access</span><span class="params">(*args)</span></span></div><div class="line">    args.each <span class="keyword">do</span> <span class="params">|arg|</span></div><div class="line">      define_method(arg) <span class="keyword">do</span></div><div class="line">        instance_variable_get(<span class="string">"@<span class="subst">#&#123;arg&#125;</span>"</span>)</div><div class="line">      <span class="keyword">end</span></div><div class="line">      define_method(<span class="string">"<span class="subst">#&#123;arg&#125;</span>="</span>) <span class="keyword">do</span> <span class="params">|val|</span></div><div class="line">        instance_variable_set(<span class="string">"@<span class="subst">#&#123;arg&#125;</span>"</span>, val)</div><div class="line">      <span class="keyword">end</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></div><div class="line">  attr_access <span class="symbol">:name</span>, <span class="symbol">:age</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">stu = Student.new</div><div class="line">stu.age = <span class="number">20</span></div><div class="line">stu.name = <span class="string">'Rapheal'</span></div><div class="line"></div><div class="line">p stu.inspect</div></pre></td></tr></table></figure>
+<p><code>【示例1】</code>一个典型元编程的例子，它实现了Ruby中自带的<code>attr_accessor</code>相同的功能，作用是动态的为传入的参数（上面代码中是<code>:name</code>和<code>:age</code>）添加<code>setter</code>和<code>getter</code>方法（stu.age=xxx为其<code>setter</code>方法, stu.age为其<code>getter</code>方法）。这样的方法避免了类似Java中的长篇<code>setter</code>和<code>getter</code>定义。</p>
+<p>##【主题】对象模型<br>Ruby作为一种完全面向对象的编程语言，即使是一个数字、类、甚至一个方法都是一个对象。所谓对象，就是能对它进行一系列操作的一个集合。</p>
+<h3 id="打开类"><a href="#打开类" class="headerlink" title="打开类"></a>打开类</h3><p>对象模型篇第一讲就是<code>打开类</code>。在<code>【示例1】</code>代码中其实就已经包含了<code>打开类</code>的一种具体实现方法。<code>打开类</code>，即打开一个已经存在的类或对象，为其<code>添加新方法</code>、<code>修改已存在的方法</code>或<code>删除不需要的方法</code>的一种技术。在<code>【示例1】</code>中，<code>Kernel</code>是Ruby库中已经存在的一个模块，使用<code>module Kernel</code>将其重新打开，并添加了一个新方法<code>attr_access</code>。于是<code>Kernel</code>模块便在原来的基础上新增了一个方法<code>attr_access</code>。</p>
+<h4 id="修改一个已经存在的方法【示例2】"><a href="#修改一个已经存在的方法【示例2】" class="headerlink" title="修改一个已经存在的方法【示例2】"></a>修改一个已经存在的方法<code>【示例2】</code></h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">str = <span class="string">"abc"</span></div><div class="line">p str.to_s <span class="comment"># 这里会输出"abc"</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">String</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">to_s</span></span></div><div class="line">    <span class="string">"Nothing"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line">str = <span class="string">"abc"</span></div><div class="line">p str.to_s <span class="comment"># 这里输出的就是"Nothing"了</span></div></pre></td></tr></table></figure>
+<p><code>String</code>也是Ruby库自带的类，<code>to_s</code>是<code>String</code>类已存在的方法，当重新打开它并重写了<code>to_s</code>方法之后，原来方法的作用便不复存在了，取而代之的是新方法的作用。（这种修改已经存在的方法又被称为<code>猴子补丁</code>）</p>
+<h4 id="打开类的利与弊"><a href="#打开类的利与弊" class="headerlink" title="打开类的利与弊"></a>打开类的利与弊</h4><p>通过<code>【示例1】</code>与<code>【示例2】</code>的代码可以知道，打开类技术可以很好的对已经存在的类或方法进行修改，使之更符合个人的使用需求。然而，若不加以思考随意使用，带来的问题也是很严重的。比如<code>String</code>类的<code>to_s</code>方法，作用就是要返回本身这个字符串，结果被别人修改了这个定义，导致了所有引用这个方法的代码全部失去了它本来的功能与意义。因此在使用打开类定义一个方法时，需要谨慎，<code>尽量取一个当前不存在的方法名来新定义一个方法</code>。</p>
+<h4 id="对象中有什么"><a href="#对象中有什么" class="headerlink" title="对象中有什么"></a>对象中有什么</h4><p>首先，<code>实例变量</code>，如<code>【示例1】</code>中的<code>:name</code>和<code>:age</code>，当调用<code>stu.name = &#39;rapheal&#39;</code>之后，<code>stu</code>对象便产生了一个实例变量<code>@name</code>。<code>实例变量必须是以【一个@符号】开头的变量名</code>。这时可以通过调用<code>stu.instance_variables</code>来查看已经存在的实例变量，可以看到输出中有<code>:@name</code>这一条。</p>
+<p>其次，<code>方法</code>。通过<code>stu.methods</code>可以查看<code>stu</code>对象能调用的所有方法。<code>Ruby对象共享方法，但不共享实例变量，共享的方法被称为【实例方法】。【实例方法】定义在对象的类中，这样可以使得同一类对象可以调用相同的方法。</code></p>
+<p><code>类也是对象。类对象所属的类是Class类。类的方法即为Class类中定义的【实例方法】。</code>比如，所有类都有一个方法<code>new</code>,而<code>new</code>方法的定义就在<code>Class</code>类中。我们甚至可以简单的认为：<code>ClassA = Class.new</code>和<code>class ClassA; end</code>是等价的。它们都是在定义一个新的类<code>ClassA</code>。</p>
+<h3 id="方法查找"><a href="#方法查找" class="headerlink" title="方法查找"></a>方法查找</h3><p>提到方法查找，那么首先要知道的就是<code>祖先链</code>。<code>祖先链</code>其实就是记录的一个类的<code>继承关系</code>的一个列表，可以通过调用<code>ancestors</code>方法来查看。比如<code>String.ancestors</code>返回的是<code>[String, Comparable, Object, Kernel, BasicObject]</code>，于是我们可以判断，<code>String</code>类继承自<code>Object</code>，（<code>Comparable</code>和<code>Kernel</code>是两个<code>module</code>,它被包含在了其中的某个类中，也会出现在祖先链中来，此处我们不讨论祖先链中的<code>module</code>），<code>Object</code>又继承自<code>BasicObject</code>。</p>
+<p>理解了方法链，再回头来看方法查找。Ruby中的方法查找有个原则叫作<code>向右，再向上。</code>比如，有一个<code>String</code>类的对象<code>str</code>，调用方法<code>str.test_call_method</code>，这时Ruby解释器会：</p>
+<ul>
+<li>1、<code>【向右】</code>来到<code>str</code>所属的<code>String</code>类查看<code>String</code>类是否定义了<code>test_call_method</code>这个方法，若定义了则直接调用</li>
+<li>2、<code>【向上】</code>否则查看<code>Comparable</code>这个<code>module</code>中是否定义这个方法（因为祖先链中有这个<code>module</code>，并且排在了第二个，即<code>String</code>类和<code>Object</code>类中间）</li>
+<li>3、<code>【向上】</code>若还未定义，则来到父类<code>Object</code>类查找</li>
+<li>4、重复上述2、3步骤直到<code>BasicObject</code>类</li>
+</ul>
+<p>上述步骤中，<code>步骤1</code>称为<code>向右</code>，<code>步骤2、3</code>称为<code>向上</code>。整个流程中，可以看出，方法查找是<code>优先向右（所属类）</code>查找，<code>再向上（优先是自身包含的模块然后是父类)</code>查找。因此称为<code>向右，再向上</code>原则。</p>
+<p>对于类所包含的模块会在方法查找时定义为一个<code>匿名类</code>并插入到祖先链中该类的<code>直接上方</code>。</p>
+<h3 id="关于self"><a href="#关于self" class="headerlink" title="关于self"></a>关于self</h3><p>在某个特定时刻，一定会有一个指定的对象在执行，这个对象就是<code>self</code>对象。最开始接触这个的时候，会有一个误区认为<code>self</code>是当前调用方法的<code>执行者</code>，然而事实上<code>self</code>是当前方法执行的<code>接收者</code>。简单说即是，<code>当前方法调用的结果会传递返回给这个self对象。</code></p>
+<p>谈到<code>self</code>，那么就应该顺便说一下<code>private</code>。Ruby中的private是和<code>self</code>相关的，在Ruby类的定义的<code>private</code>方法是不能被显式调用的。</p>
+<h4 id="private示例【示例3】"><a href="#private示例【示例3】" class="headerlink" title="private示例【示例3】"></a>private示例<code>【示例3】</code></h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">print_self</span></span></div><div class="line">    <span class="keyword">self</span>.t_pri</div><div class="line">  <span class="keyword">end</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">print_self_2</span></span></div><div class="line">    t_pri</div><div class="line">  <span class="keyword">end</span></div><div class="line">  private</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">t_pri</span></span></div><div class="line">    p <span class="string">"hello world"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">obj1 = A.new</div><div class="line">obj1.print_self_2 <span class="comment"># 输出 "hello world"</span></div><div class="line">obj1.print_self     <span class="comment"># 报错, NoMethodError: private method 't_pri' called</span></div><div class="line">obj1.t_pri            <span class="comment"># 报错，同上</span></div></pre></td></tr></table></figure>
+<p>从<code>【示例3】</code>，可以看出私有方法<code>t_pri</code>只能由<code>self</code>隐式调用，即<code>私有方法只能在定义的内部以直接调用方式调用，而不能在任何地方以 xxx.yyyy的方式调用。同时，若没有显式指定方法接收者，那么调用方法的接收都将隐式指定为self对象。</code></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>第一章对象模型基本上就这些内容，了解对象基本模型对于以后编写Gem包等扩展有相当重要的作用，尤其是self对象。以后的章节讲到扁平作用域的时候会对self对象有更加深刻的描述，如果这些技能不熟练，要编写Gem扩展真的是举步维艰。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Ruby/" rel="tag">#Ruby</a>
+          
+            <a href="/tags/元编程/" rel="tag">#元编程</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/29/ruby-load-file/" rel="next" title="浅淡Ruby的文件加载与继承">
+                <i class="fa fa-chevron-left"></i> 浅淡Ruby的文件加载与继承
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/29/metaprogramming-methods/" rel="prev" title="Ruby元编程-方法">
+                Ruby元编程-方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/08/29/metaprogramming-object-model/"
+     data-title="Ruby元编程-对象模型"
+     data-content=""
+     data-url="http://yoursite.com/2016/08/29/metaprogramming-object-model/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/29/metaprogramming-object-model/"
+           data-title="Ruby元编程-对象模型" data-url="http://yoursite.com/2016/08/29/metaprogramming-object-model/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sven" />
+          <p class="site-author-name" itemprop="name">Sven</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#【前言】元编程是什么"><span class="nav-number">1.</span> <span class="nav-text">【前言】元编程是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元编程示例"><span class="nav-number">2.</span> <span class="nav-text">元编程示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#【示例1】"><span class="nav-number">2.1.</span> <span class="nav-text">【示例1】</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打开类"><span class="nav-number">3.</span> <span class="nav-text">打开类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#修改一个已经存在的方法【示例2】"><span class="nav-number">3.1.</span> <span class="nav-text">修改一个已经存在的方法【示例2】</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#打开类的利与弊"><span class="nav-number">3.2.</span> <span class="nav-text">打开类的利与弊</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象中有什么"><span class="nav-number">3.3.</span> <span class="nav-text">对象中有什么</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法查找"><span class="nav-number">4.</span> <span class="nav-text">方法查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于self"><span class="nav-number">5.</span> <span class="nav-text">关于self</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#private示例【示例3】"><span class="nav-number">5.1.</span> <span class="nav-text">private示例【示例3】</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sven</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"svenblog"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
