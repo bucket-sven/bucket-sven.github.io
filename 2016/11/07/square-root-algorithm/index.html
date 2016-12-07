@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="es7,decorator,babel," />
+  <meta name="keywords" content="算法,Node," />
 
 
 
@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="es7&amp;#x7684;&amp;#x65B0;&amp;#x7279;&amp;#x6027;&amp;#x4E4B;&amp;#x4E00;&amp;#x5C31;&amp;#x662F;&amp;#x52A0;&amp;#x5165;&amp;#x4E86;&amp;#x4FEE;&amp;#x9970;&amp;#x5668;(decorator)&amp;#x3002;">
+<meta name="description" content="&amp;#x524D;&amp;#x51E0;&amp;#x5929;&amp;#x9047;&amp;#x5230;&amp;#x4E00;&amp;#x4E2A;&amp;#x95EE;&amp;#x9898;: &amp;#x5982;&amp;#x4F55;&amp;#x5B9E;&amp;#x73B0;&amp;#x5BF9;&amp;#x4E00;&amp;#x4E2A;&amp;#x6570;&amp;#x5F00;&amp;#x5E73;&amp;#x65B9;&amp;#x7684;&amp;#x7B97;&amp;#x6CD5;? &amp;#x4E8E;&amp;#x6">
 <meta property="og:type" content="article">
-<meta property="og:title" content="es7修饰器">
-<meta property="og:url" content="http://yoursite.com/2016/11/21/es7-decorator/index.html">
+<meta property="og:title" content="Node.js实现平方根算法">
+<meta property="og:url" content="http://yoursite.com/2016/11/07/square-root-algorithm/index.html">
 <meta property="og:site_name" content="Sven的博客">
-<meta property="og:description" content="es7&amp;#x7684;&amp;#x65B0;&amp;#x7279;&amp;#x6027;&amp;#x4E4B;&amp;#x4E00;&amp;#x5C31;&amp;#x662F;&amp;#x52A0;&amp;#x5165;&amp;#x4E86;&amp;#x4FEE;&amp;#x9970;&amp;#x5668;(decorator)&amp;#x3002;">
-<meta property="og:updated_time" content="2016-12-07T13:54:42.000Z">
+<meta property="og:description" content="&amp;#x524D;&amp;#x51E0;&amp;#x5929;&amp;#x9047;&amp;#x5230;&amp;#x4E00;&amp;#x4E2A;&amp;#x95EE;&amp;#x9898;: &amp;#x5982;&amp;#x4F55;&amp;#x5B9E;&amp;#x73B0;&amp;#x5BF9;&amp;#x4E00;&amp;#x4E2A;&amp;#x6570;&amp;#x5F00;&amp;#x5E73;&amp;#x65B9;&amp;#x7684;&amp;#x7B97;&amp;#x6CD5;? &amp;#x4E8E;&amp;#x6">
+<meta property="og:updated_time" content="2016-12-07T13:55:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="es7修饰器">
-<meta name="twitter:description" content="es7&amp;#x7684;&amp;#x65B0;&amp;#x7279;&amp;#x6027;&amp;#x4E4B;&amp;#x4E00;&amp;#x5C31;&amp;#x662F;&amp;#x52A0;&amp;#x5165;&amp;#x4E86;&amp;#x4FEE;&amp;#x9970;&amp;#x5668;(decorator)&amp;#x3002;">
+<meta name="twitter:title" content="Node.js实现平方根算法">
+<meta name="twitter:description" content="&amp;#x524D;&amp;#x51E0;&amp;#x5929;&amp;#x9047;&amp;#x5230;&amp;#x4E00;&amp;#x4E2A;&amp;#x95EE;&amp;#x9898;: &amp;#x5982;&amp;#x4F55;&amp;#x5B9E;&amp;#x73B0;&amp;#x5BF9;&amp;#x4E00;&amp;#x4E2A;&amp;#x6570;&amp;#x5F00;&amp;#x5E73;&amp;#x65B9;&amp;#x7684;&amp;#x7B97;&amp;#x6CD5;? &amp;#x4E8E;&amp;#x6">
 
 
 
@@ -114,10 +114,10 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/11/21/es7-decorator/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/11/07/square-root-algorithm/"/>
 
 
-  <title> es7修饰器 | Sven的博客 </title>
+  <title> Node.js实现平方根算法 | Sven的博客 </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -247,7 +247,7 @@
             
             
               
-                es7修饰器
+                Node.js实现平方根算法
               
             
           </h1>
@@ -259,8 +259,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-11-21T00:00:00+08:00" content="2016-11-21">
-              2016-11-21
+            <time itemprop="dateCreated" datetime="2016-11-07T00:00:00+08:00" content="2016-11-07">
+              2016-11-07
             </time>
           </span>
 
@@ -270,8 +270,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/11/21/es7-decorator/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/21/es7-decorator/" itemprop="commentsCount"></span>
+                <a href="/2016/11/07/square-root-algorithm/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/07/square-root-algorithm/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -294,11 +294,10 @@
       
 
       
-        <p>es7&#x7684;&#x65B0;&#x7279;&#x6027;&#x4E4B;&#x4E00;&#x5C31;&#x662F;&#x52A0;&#x5165;&#x4E86;&#x4FEE;&#x9970;&#x5668;(decorator)&#x3002;</p>
+        <p>&#x524D;&#x51E0;&#x5929;&#x9047;&#x5230;&#x4E00;&#x4E2A;&#x95EE;&#x9898;: &#x5982;&#x4F55;&#x5B9E;&#x73B0;&#x5BF9;&#x4E00;&#x4E2A;&#x6570;&#x5F00;&#x5E73;&#x65B9;&#x7684;&#x7B97;&#x6CD5;? &#x4E8E;&#x662F;&#x4FBF;&#x6253;&#x7B97;&#x4EB2;&#x8EAB;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;sqrt&#x7B97;&#x6CD5;&#x3002;</p>
 <a id="more"></a>
-<h2 id="&#x5B89;&#x88C5;es7&#x8F6C;&#x7801;&#x5305;"><a href="#&#x5B89;&#x88C5;es7&#x8F6C;&#x7801;&#x5305;" class="headerlink" title="&#x5B89;&#x88C5;es7&#x8F6C;&#x7801;&#x5305;"></a>&#x5B89;&#x88C5;es7&#x8F6C;&#x7801;&#x5305;</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install --save-dev babel-plugin-transform-decorators-legacy babel-plugin-transform-class-properties</div></pre></td></tr></table></figure>
-<h2 id="&#x914D;&#x7F6E;-babelrc"><a href="#&#x914D;&#x7F6E;-babelrc" class="headerlink" title="&#x914D;&#x7F6E;.babelrc"></a>&#x914D;&#x7F6E;.babelrc</h2><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">{</div><div class="line">  <span class="attr">&quot;plugins&quot;</span>: [<span class="string">&quot;transform-decorators-legacy&quot;</span>, <span class="string">&quot;transform-class-properties&quot;</span>]</div><div class="line">}</div></pre></td></tr></table></figure>
-<h2 id="&#x88C5;&#x9970;&#x5668;&#x5B9E;&#x4F8B;"><a href="#&#x88C5;&#x9970;&#x5668;&#x5B9E;&#x4F8B;" class="headerlink" title="&#x88C5;&#x9970;&#x5668;&#x5B9E;&#x4F8B;"></a>&#x88C5;&#x9970;&#x5668;&#x5B9E;&#x4F8B;</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">deprecated</span>(<span class="params">target</span>) </span>{</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;method is deprecated&quot;</span>);</div><div class="line">}</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>{</div><div class="line">  @deprecated</div><div class="line">  m() {}</div><div class="line">}</div></pre></td></tr></table></figure>
+<h2 id="&#x4EE3;&#x7801;"><a href="#&#x4EE3;&#x7801;" class="headerlink" title="&#x4EE3;&#x7801;"></a>&#x4EE3;&#x7801;</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sqrt</span>(<span class="params">num</span>) </span>{</div><div class="line">  <span class="keyword">let</span> seido = <span class="number">1e-15</span> <span class="comment">// &#x8868;&#x793A;&#x7CBE;&#x5EA6;</span></div><div class="line"></div><div class="line">  <span class="comment">// &#x7C7B;&#x4F3C;&#x4E8C;&#x5206;&#x7B97;&#x6CD5;&#xFF0C;&#x53D6;&#x4E2D;&#x503C;&#xFF0C;</span></div><div class="line">  <span class="comment">// params[m1, m2] m1&#x4E3A;&#x533A;&#x95F4;&#x6700;&#x5C0F;&#x503C;, m2&#x4E3A;&#x533A;&#x95F4;&#x6700;&#x5927;&#x503C;</span></div><div class="line">  <span class="comment">// &#x6BD4;&#x5982;&#xFF0C;&#x8BA1;&#x7B97;16&#x7684;&#x5E73;&#x65B9;&#x6839;&#xFF0C;&#x4F20;&#x5165;&#x53C2;&#x6570;&#x4E3A;[0, 16]&#xFF0C;&#x8FD4;&#x56DE;&#x7ED3;&#x679C;&#x4E3A;[4,8], &#x8868;&#x793A;&#x8BA1;&#x7B97;&#x7ED3;&#x679C;&#x7684;&#x503C;&#x5728;[4, 8]&#x8FD9;&#x4E2A;&#x533A;&#x95F4;&#x5185;</span></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getValues</span>(<span class="params">m1, m2</span>) </span>{</div><div class="line">    <span class="keyword">let</span> m = (m1 + m2) / <span class="number">2</span></div><div class="line">    <span class="keyword">if</span>(num &gt;= <span class="number">1</span>) {</div><div class="line">      <span class="comment">//&#x5F53;&#x5F00;&#x65B9;&#x7684;&#x503C;&#x5927;&#x4E8E;1</span></div><div class="line">      <span class="keyword">while</span>(m * m &gt; num) {</div><div class="line">        m2 = m</div><div class="line">        m = m / <span class="number">2</span></div><div class="line">      }</div><div class="line">      m1 = m</div><div class="line">    } <span class="keyword">else</span> {</div><div class="line">      <span class="comment">//&#x5F53;&#x5F00;&#x65B9;&#x7684;&#x503C;&#x5C0F;&#x4E8E;1</span></div><div class="line">      <span class="keyword">while</span>(m * m &lt; num) {</div><div class="line">        m1 = m</div><div class="line">        m  = m * <span class="number">2</span></div><div class="line">      }</div><div class="line">      m2 = m</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> [m1, m2]</div><div class="line">  }</div><div class="line"></div><div class="line">  <span class="keyword">var</span> [m1, m2] = [<span class="number">0</span>, num]</div><div class="line">  <span class="keyword">while</span>(<span class="literal">true</span>) {</div><div class="line">    <span class="comment">//&#x65E0;&#x9650;&#x5FAA;&#x73AF;&#x4E0D;&#x65AD;&#x7F29;&#x5C0F;&#x67E5;&#x627E;&#x7684;&#x533A;&#x95F4;</span></div><div class="line">    [m1, m2] = getValues(m1, m2)</div><div class="line">    <span class="comment">//&#x76F4;&#x5230;&#x8FBE;&#x5230;&#x7CBE;&#x5EA6;&#x540E;&#x8DF3;&#x51FA;&#x5FAA;&#x73AF;</span></div><div class="line">    <span class="keyword">if</span>(<span class="built_in">Math</span>.abs(m1 - m2) &lt; seido) {</div><div class="line">      <span class="keyword">break</span></div><div class="line">    }</div><div class="line">  }</div><div class="line"></div><div class="line">  <span class="comment">// &#x6700;&#x540E;&#x6709;&#x4E00;&#x4E2A;&#x5728;&#x7CBE;&#x5EA6;&#x8303;&#x56F4;&#x5185;&#x7684;&#x6700;&#x5C0F;&#x533A;&#x95F4;, &#x5728;&#x6B64;&#x533A;&#x95F4;&#x5185;&#x8FDB;&#x884C;&#x7D2F;&#x52A0;&#x6216;&#x7D2F;&#x51CF;&#x679A;&#x4E3E;, &#x76F4;&#x5230;&#x6700;&#x76F8;&#x4F3C;&#x7684;&#x503C;</span></div><div class="line">  <span class="comment">// &#x7D2F;&#x52A0;&#x6216;&#x7D2F;&#x51CF;&#x53D6;&#x51B3;&#x4E8E;&#x54EA;&#x4E2A;&#x5CF0;&#x503C;&#x4E0E;&#x76EE;&#x6807;&#x503C;&#x7684;&#x5DEE;&#x8DDD;&#x8F83;&#x5C0F;</span></div><div class="line">  <span class="keyword">var</span> mid</div><div class="line">  <span class="keyword">if</span>(<span class="built_in">Math</span>.abs(num - m1) &gt; <span class="built_in">Math</span>.abs(num - m2)) {</div><div class="line">    mid = m1</div><div class="line">    <span class="keyword">while</span>(mid * mid &lt; num) {</div><div class="line">      mid = mid + seido</div><div class="line">    }</div><div class="line">  } <span class="keyword">else</span> {</div><div class="line">    mid = m2</div><div class="line">    <span class="keyword">while</span>(mid * mid &gt; num) {</div><div class="line">      mid = mid - seido</div><div class="line">    }</div><div class="line">  }</div><div class="line">  <span class="keyword">return</span> mid</div><div class="line">}</div></pre></td></tr></table></figure>
+<p>&#x867D;&#x7136;&#x662F;&#x80FD;&#x8BA1;&#x7B97;&#x51FA;&#x4E00;&#x90E8;&#x5206;&#x6570;&#x7684;&#x5E73;&#x65B9;&#x6839;&#x503C;&#x4E86;&#xFF0C;&#x4F46;&#x662F;&#x95EE;&#x9898;&#x8FD8;&#x662F;&#x6709;&#x7684;&#x3002;&#x7531;&#x4E8E;&#x4F7F;&#x7528;&#x4E86;&#x7CBE;&#x5EA6;&#x548C;&#x65E0;&#x9650;&#x5FAA;&#x73AF;&#xFF0C;&#x5F53;&#x7CBE;&#x5EA6;&#x51FA;&#x73B0;&#x8BEF;&#x5DEE;&#x503C;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x8BE5;&#x65B9;&#x6CD5;&#x4F1A;&#x9677;&#x5165;&#x6B7B;&#x5FAA;&#x73AF;&#xFF0C;&#x5982;&#x7CBE;&#x5EA6;&#x503C;&#x5C0F;&#x4E8E;1e16&#x7684;&#x65F6;&#x5019;&#x3002;&#x56E0;&#x6B64;&#x5982;&#x679C;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x7CBE;&#x5EA6;&#x8BA1;&#x7B97;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6700;&#x597D;&#x5C31;&#x4E0D;&#x8981;&#x4F7F;&#x7528;&#x6B7B;&#x5FAA;&#x73AF;&#x4E86;&#x3002;<br>&#x6B64;&#x5904;&#x4EC5;&#x63D0;&#x4F9B;&#x4E00;&#x79CD;&#x7B97;&#x6CD5;&#x601D;&#x8DEF;&#xFF0C;&#x81F3;&#x4E8E;&#x5177;&#x4F53;&#x5982;&#x4F55;&#x89E3;&#x51B3;&#xFF0C;&#x6B64;&#x65F6;&#x4E0D;&#x52A0;&#x8BA8;&#x8BBA;&#x3002;</p>
 
       
     </div>
@@ -321,11 +320,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/es7/" rel="tag">#es7</a>
+            <a href="/tags/算法/" rel="tag">#算法</a>
           
-            <a href="/tags/decorator/" rel="tag">#decorator</a>
-          
-            <a href="/tags/babel/" rel="tag">#babel</a>
+            <a href="/tags/Node/" rel="tag">#Node</a>
           
         </div>
       
@@ -334,13 +331,17 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/07/square-root-algorithm/" rel="next" title="Node.js实现平方根算法">
-                <i class="fa fa-chevron-left"></i> Node.js实现平方根算法
+              <a href="/2016/10/23/electron-built-with-webpack/" rel="next" title="使用webpack构建electron项目">
+                <i class="fa fa-chevron-left"></i> 使用webpack构建electron项目
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/21/es7-decorator/" rel="prev" title="es7修饰器">
+                es7修饰器 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -355,10 +356,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/11/21/es7-decorator/"
-     data-title="es7修饰器"
+        <div class="ds-share flat" data-thread-key="2016/11/07/square-root-algorithm/"
+     data-title="Node.js实现平方根算法"
      data-content=""
-     data-url="http://yoursite.com/2016/11/21/es7-decorator/">
+     data-url="http://yoursite.com/2016/11/07/square-root-algorithm/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -385,8 +386,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/11/21/es7-decorator/"
-           data-title="es7修饰器" data-url="http://yoursite.com/2016/11/21/es7-decorator/">
+      <div class="ds-thread" data-thread-key="2016/11/07/square-root-algorithm/"
+           data-title="Node.js实现平方根算法" data-url="http://yoursite.com/2016/11/07/square-root-algorithm/">
       </div>
     
   </div>
@@ -470,7 +471,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装es7转码包"><span class="nav-number">1.</span> <span class="nav-text">安装es7转码包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置-babelrc"><span class="nav-number">2.</span> <span class="nav-text">配置.babelrc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰器实例"><span class="nav-number">3.</span> <span class="nav-text">装饰器实例</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">1.</span> <span class="nav-text">代码</span></a></li></ol></div>
             
           </div>
         </section>
