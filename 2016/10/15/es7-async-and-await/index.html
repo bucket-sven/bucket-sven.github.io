@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="node,es7," />
+  <meta name="keywords" content="es7,node," />
 
 
 
@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/10/15/es7-async-and-await/index.html">
 <meta property="og:site_name" content="Sven的博客">
 <meta property="og:description" content="Node.js es7&amp;#x6807;&amp;#x51C6;&amp;#x4E2D;&amp;#x52A0;&amp;#x5165;&amp;#x4E86;async/await&amp;#x7528;&amp;#x4E8E;&amp;#x5904;&amp;#x7406;&amp;#x5F02;&amp;#x6B65;&amp;#x51FD;&amp;#x6570;&amp;#x3002; async&amp;#x6807;&amp;#x8BB0;&amp;#x7684;&amp;#x51FD;&amp;#x6570;&amp;#x4E2D;&amp;#x6">
-<meta property="og:updated_time" content="2016-12-07T13:54:42.000Z">
+<meta property="og:updated_time" content="2017-03-11T04:34:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="es7中的async/await">
 <meta name="twitter:description" content="Node.js es7&amp;#x6807;&amp;#x51C6;&amp;#x4E2D;&amp;#x52A0;&amp;#x5165;&amp;#x4E86;async/await&amp;#x7528;&amp;#x4E8E;&amp;#x5904;&amp;#x7406;&amp;#x5F02;&amp;#x6B65;&amp;#x51FD;&amp;#x6570;&amp;#x3002; async&amp;#x6807;&amp;#x8BB0;&amp;#x7684;&amp;#x51FD;&amp;#x6570;&amp;#x4E2D;&amp;#x6">
@@ -310,7 +310,7 @@
 <h3 id="&#x4EE5;Generator&#x65B9;&#x5F0F;"><a href="#&#x4EE5;Generator&#x65B9;&#x5F0F;" class="headerlink" title="&#x4EE5;Generator&#x65B9;&#x5F0F;"></a>&#x4EE5;Generator&#x65B9;&#x5F0F;</h3><p>&#x9664;&#x6B64;&#x4E4B;&#x5916;&#xFF0C;&#x8FD8;&#x6709;&#x4E00;&#x79CD;&#x751F;&#x6210;<code>promise</code>&#x5BF9;&#x8C61;&#x7684;&#x65B9;&#x6CD5;, &#x90A3;&#x4FBF;&#x662F;<code>generator</code>, &#x4F7F;&#x7528;&#x8FD9;&#x79CD;&#x65B9;&#x6CD5;&#x9700;&#x8981;&#x5F15;&#x7528;<code>co</code>&#x8FD9;&#x4E2A;&#x5305;, &#x4EE3;&#x7801;&#x5982;&#x4E0B;:</p>
 <h4 id="&#x3010;&#x793A;&#x4F8B;&#x4EE3;&#x7801;3&#x3011;"><a href="#&#x3010;&#x793A;&#x4F8B;&#x4EE3;&#x7801;3&#x3011;" class="headerlink" title="&#x3010;&#x793A;&#x4F8B;&#x4EE3;&#x7801;3&#x3011;"></a>&#x3010;&#x793A;&#x4F8B;&#x4EE3;&#x7801;3&#x3011;</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> co <span class="keyword">from</span> <span class="string">&apos;co&apos;</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">readWithGenerator</span>(<span class="params">filePath</span>) </span>{</div><div class="line">  <span class="keyword">return</span> co(<span class="function"><span class="keyword">function</span>*(<span class="params"></span>)</span>{</div><div class="line">    <span class="keyword">let</span> content = <span class="keyword">yield</span> (<span class="function">(<span class="params">fp</span>) =&gt;</span> {</div><div class="line">      <span class="keyword">return</span> <span class="function">(<span class="params">callback</span>) =&gt;</span> {</div><div class="line">        fs.readFile(fp, <span class="string">&quot;utf8&quot;</span>, callback);</div><div class="line">      }</div><div class="line">    })(filePath);</div><div class="line">    <span class="keyword">return</span> content;</div><div class="line">  });</div><div class="line">}</div></pre></td></tr></table></figure>
 <p><code>&#x3010;&#x793A;&#x4F8B;&#x4EE3;&#x7801;1&#x3011;</code>&#x4E0E;<code>&#x3010;&#x793A;&#x4F8B;&#x4EE3;&#x7801;3&#x3011;</code>&#x4F5C;&#x7528;&#x5B8C;&#x5168;&#x4E00;&#x6837;, &#x6700;&#x540E;&#x5B83;&#x4EEC;&#x90FD;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;<code>promise</code>&#x5BF9;&#x8C61;&#xFF0C;&#x56E0;&#x6B64;&#x8C03;&#x7528;&#x65B9;&#x5F0F;&#x4E5F;&#x4E00;&#x6837;(&#x89C1;<code>&#x3010;&#x793A;&#x4F8B;&#x4EE3;&#x7801;2&#x3011;</code>).</p>
-<h3 id="&#x5C0F;&#x7ED3;"><a href="#&#x5C0F;&#x7ED3;" class="headerlink" title="&#x5C0F;&#x7ED3;"></a>&#x5C0F;&#x7ED3;</h3><p><code>await</code> &#x4EC5;&#x4EC5;&#x53EA;&#x662F;<code>es7</code>&#x52A0;&#x5165;&#x7684;&#x9ED8;&#x8BA4;&#x5BF9;<code>promise</code>&#x7684;&#x4E00;&#x79CD;&#x5904;&#x7406;&#x673A;&#x5236;&#x800C;&#x5DF2;&#xFF0C;&#x5B83;&#x7684;&#x4F5C;&#x7528;&#x5176;&#x5B9E;&#x7C7B;&#x4F3C;&#x4E8E;<code>generator</code>&#x91CC;&#x9762;&#x7684;<code>yield</code>&#x3002;<code>yield</code>&#x540E;&#x9762;&#x52A0;&#x7684;&#x662F;&#x4E00;&#x4E2A;<code>generator</code>&#x51FD;&#x6570;&#xFF0C;&#x800C;<code>await</code>&#x540E;&#x9762;&#x63A5;&#x7684;&#x662F;&#x4E00;&#x4E2A;<code>promise</code>&#x5BF9;&#x8C61;&#xFF0C;&#x4F46;&#x5B83;&#x4EEC;&#x90FD;&#x4F1A;&#x5728;&#x6B64;&#x7B49;&#x5F85;&#x7ED3;&#x679C;&#x8FD4;&#x56DE;&#x540E;&#x624D;&#x4F1A;&#x6267;&#x884C;&#x4E4B;&#x540E;&#x7684;&#x4EE3;&#x7801;&#x3002;</p>
+<h3 id="&#x5C0F;&#x7ED3;"><a href="#&#x5C0F;&#x7ED3;" class="headerlink" title="&#x5C0F;&#x7ED3;"></a>&#x5C0F;&#x7ED3;</h3><p><code>await</code> &#x4EC5;&#x4EC5;&#x53EA;&#x662F;<code>es7</code>&#x52A0;&#x5165;&#x7684;&#x9ED8;&#x8BA4;&#x5BF9;<code>promise</code>&#x7684;&#x4E00;&#x79CD;&#x5904;&#x7406;&#x673A;&#x5236;&#x800C;&#x5DF2;&#xFF0C;&#x5B83;&#x7684;&#x4F5C;&#x7528;&#x5176;&#x5B9E;&#x7C7B;&#x4F3C;&#x4E8E;<code>generator</code>&#x91CC;&#x9762;&#x7684;<code>yield</code>&#x3002;<code>yield</code>&#x540E;&#x9762;&#x52A0;&#x7684;&#x53EF;&#x4EE5;&#x662F;&#x4E00;&#x4E2A;<code>generator</code>&#x51FD;&#x6570;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x662F;<code>promise</code>&#x5BF9;&#x8C61;&#xFF0C;&#x751A;&#x81F3;&#x53EF;&#x4EE5;&#x662F;&#x4E00;&#x4E2A;<code>promise</code>&#x6570;&#x7EC4;&#x7B49;;&#x800C;<code>await</code>&#x540E;&#x9762;&#x63A5;&#x7684;&#x53EA;&#x80FD;&#x662F;&#x4E00;&#x4E2A;<code>promise</code>&#x5BF9;&#x8C61;&#xFF0C;&#x4F46;&#x5B83;&#x4EEC;&#x90FD;&#x4F1A;&#x5728;&#x6B64;&#x7B49;&#x5F85;&#x7ED3;&#x679C;&#x8FD4;&#x56DE;&#x540E;&#x624D;&#x4F1A;&#x6267;&#x884C;&#x4E4B;&#x540E;&#x7684;&#x4EE3;&#x7801;&#x3002;</p>
 
       
     </div>
@@ -333,9 +333,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/node/" rel="tag">#node</a>
-          
             <a href="/tags/es7/" rel="tag">#es7</a>
+          
+            <a href="/tags/node/" rel="tag">#node</a>
           
         </div>
       
