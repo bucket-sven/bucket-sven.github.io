@@ -294,7 +294,7 @@
       
 
       
-        <p>&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;Ruby&#x5F00;&#x53D1;&#x8005;&#xFF0C;&#x8BA9;&#x4EBA;&#x53C8;&#x7231;&#x53C8;&#x6068;&#x7684;&#x4FBF;&#x662F;&#x5143;&#x7F16;&#x7A0B;&#x4E86;&#x3002;</p>
+        <script src="/assets/js/APlayer.min.js"> </script><p>&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;Ruby&#x5F00;&#x53D1;&#x8005;&#xFF0C;&#x8BA9;&#x4EBA;&#x53C8;&#x7231;&#x53C8;&#x6068;&#x7684;&#x4FBF;&#x662F;&#x5143;&#x7F16;&#x7A0B;&#x4E86;&#x3002;</p>
 <a id="more"></a>
 <h3 id="&#x3010;&#x524D;&#x8A00;&#x3011;&#x5143;&#x7F16;&#x7A0B;&#x662F;&#x4EC0;&#x4E48;"><a href="#&#x3010;&#x524D;&#x8A00;&#x3011;&#x5143;&#x7F16;&#x7A0B;&#x662F;&#x4EC0;&#x4E48;" class="headerlink" title="&#x3010;&#x524D;&#x8A00;&#x3011;&#x5143;&#x7F16;&#x7A0B;&#x662F;&#x4EC0;&#x4E48;"></a>&#x3010;&#x524D;&#x8A00;&#x3011;&#x5143;&#x7F16;&#x7A0B;&#x662F;&#x4EC0;&#x4E48;</h3><p>&#x7B80;&#x5355;&#x5730;&#x8BF4;&#xFF0C;&#x5143;&#x7F16;&#x7A0B;&#x5C31;&#x662F;&#x5BF9;&#x8BED;&#x8A00;&#x672C;&#x8EAB;&#x7684;&#x8FDB;&#x884C;&#x64CD;&#x4F5C;&#x7684;&#x4E00;&#x79CD;&#x7F16;&#x7A0B;&#x624B;&#x6BB5;&#xFF0C;&#x6700;&#x5E38;&#x89C1;&#x7684;&#x5C31;&#x662F;<code>&#x4EE3;&#x7801;&#x751F;&#x6210;&#x4EE3;&#x7801;</code>&#x3002;&#x5BF9;&#x4E8E;Ruby&#x8FD9;&#x95E8;&#x8BED;&#x8A00;&#x800C;&#x8A00;&#xFF0C;&#x4E0D;&#x4F1A;&#x5143;&#x7F16;&#x7A0B;&#xFF0C;&#x7B49;&#x4E8E;&#x4E0D;&#x4F1A;&#x8FD9;&#x95E8;&#x8BED;&#x8A00;&#xFF0C;&#x56E0;&#x4E3A;&#x8FD9;&#x662F;&#x5B83;&#x7684;&#x6838;&#x5FC3;&#x80FD;&#x529B;&#x4E0E;&#x9B45;&#x529B;&#x3002;&#x672C;&#x6587;&#x662F;&#x57FA;&#x4E8E;&#x9605;&#x8BFB;&#x300A;Ruby&#x5143;&#x7F16;&#x7A0B;&#x300B;&#x540E;&#x8BB0;&#x5F55;&#x7684;&#x4E00;&#x4E9B;&#x81EA;&#x5DF1;&#x7684;&#x7406;&#x89E3;&#x548C;&#x770B;&#x6CD5;&#x3002;</p>
 <h3 id="&#x5143;&#x7F16;&#x7A0B;&#x793A;&#x4F8B;"><a href="#&#x5143;&#x7F16;&#x7A0B;&#x793A;&#x4F8B;" class="headerlink" title="&#x5143;&#x7F16;&#x7A0B;&#x793A;&#x4F8B;"></a>&#x5143;&#x7F16;&#x7A0B;&#x793A;&#x4F8B;</h3><h4 id="&#x3010;&#x793A;&#x4F8B;1&#x3011;"><a href="#&#x3010;&#x793A;&#x4F8B;1&#x3011;" class="headerlink" title="&#x3010;&#x793A;&#x4F8B;1&#x3011;"></a>&#x3010;&#x793A;&#x4F8B;1&#x3011;</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">Kernel</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">attr_access</span><span class="params">(*args)</span></span></div><div class="line">    args.each <span class="keyword">do</span> <span class="params">|arg|</span></div><div class="line">      define_method(arg) <span class="keyword">do</span></div><div class="line">        instance_variable_get(<span class="string">&quot;@<span class="subst">#{arg}</span>&quot;</span>)</div><div class="line">      <span class="keyword">end</span></div><div class="line">      define_method(<span class="string">&quot;<span class="subst">#{arg}</span>=&quot;</span>) <span class="keyword">do</span> <span class="params">|val|</span></div><div class="line">        instance_variable_set(<span class="string">&quot;@<span class="subst">#{arg}</span>&quot;</span>, val)</div><div class="line">      <span class="keyword">end</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></div><div class="line">  attr_access <span class="symbol">:name</span>, <span class="symbol">:age</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">stu = Student.new</div><div class="line">stu.age = <span class="number">20</span></div><div class="line">stu.name = <span class="string">&apos;Rapheal&apos;</span></div><div class="line"></div><div class="line">p stu.inspect</div></pre></td></tr></table></figure>
@@ -456,7 +456,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -466,7 +466,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
